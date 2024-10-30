@@ -1,0 +1,31 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: electro_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root  # Ustaw hasło root
+      MYSQL_DATABASE: electro_portal  # Nazwa bazy danych
+      MYSQL_USER: admin  # Nazwa użytkownika
+      MYSQL_PASSWORD: admin  # Hasło użytkownika
+    ports:
+      - "3306:3306"  # Mapowanie portu MySQL
+    volumes:
+      - db_data:/var/lib/mysql  # Przechowywanie danych MySQL
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: electro_phpmyadmin
+    environment:
+      PMA_HOST: db  # Nazwa hosta z serwisu db
+      PMA_USER: admin  # Użytkownik bazy danych
+      PMA_PASSWORD: admin  # Hasło do bazy danych
+      PMA_ABSOLUTE_URI: http://localhost:8080
+    ports:
+      - "8080:80"  # Mapowanie portu PHPMyAdmin
+
+volumes:
+  db_data:
+    driver: local
